@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # Get SETTINGS_FILE location from environment variable, default to ~/settings
-declare -r SETTINGS_FILE=${SETTINGS_FILE:-"$(realpath ~/settings)"};
+declare SETTINGS_FILE=${SETTINGS_FILE:-"$(realpath ~/settings)"};
 # Get ATTRACT_EMULATORS_DIR location from environment variable, default to ~/.attract/emulators
 # NOTE: realpath -m will make canonical path whether parent dirs exist or not so that
 #       error messages are more helpful as to where ATTRACT_EMULATORS_DIR is looking
-declare -r ATTRACT_EMULATORS_DIR=${ATTRACT_EMULATORS_DIR:-"$(realpath -m ~/.attract/emulators)"}
+declare ATTRACT_EMULATORS_DIR=${ATTRACT_EMULATORS_DIR:-"$(realpath -m ~/.attract/emulators)"}
 
 # Update setting in if it exists in SETTINGS_FILE, else append it
 #   Usage: update_settings setting_name setting_value
