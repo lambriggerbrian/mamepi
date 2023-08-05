@@ -10,10 +10,10 @@ declare ATTRACT_EMULATORS_DIR=${ATTRACT_EMULATORS_DIR:-"$(realpath -m ~/.attract
 # Update setting in if it exists in SETTINGS_FILE, else append it
 #   Usage: update_settings setting_name setting_value
 #       setting_name: the name of the setting to update
-#       setting_value: the value to update, defaults to empty string ''
+#       setting_value: the value to update, defaults to nothing
 update_settings(){ 
     local -r setting_name="${1}";
-    local -r setting_value="${2:-}";
+    local -r setting_value="${2:-}"; # Set to nothing as default
     local -r output_line="${setting_name}=${setting_value}";
     # Check for setting_name and setting_value
     if [ -z "${setting_name}" ]; then
