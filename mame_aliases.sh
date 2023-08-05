@@ -15,7 +15,7 @@ update_settings(){
     local -r setting_name="${1}";
     local -r setting_value="${2:-}"; # Set to nothing as default
     local -r output_line="${setting_name}=${setting_value}";
-    # Check for setting_name and setting_value
+    # Check for setting_name
     if [ -z "${setting_name}" ]; then
         echo "update_settings[ERR]: Must pass setting_name.";
         return 1;
