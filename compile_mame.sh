@@ -17,13 +17,6 @@ declare -a MAME_BUILD_DEPS=("build-essential" "gcc-aarch64-linux-gnu" "fontconfi
 declare -a MAME_CONFIG_OPTS=("TARGETOS=linux" "NO_X11=1" "NOWERROR=1" "NO_USE_XINPUT=1" "NO_USE_XINPUT_WII_LIGHTGUN_HACK=1" "NO_OPENGL=1" "USE_QTDEBUG=0" "DEBUG=0" "REGENIE=1" "NO_BGFX=1" "FORCE_DRC_C_BACKEND=1" "NO_USE_PORTAUDIO=1" "SYMBOLS=0")
 declare -r MAX_THREAD=2
 
-# If MAME2-config is installed, set MAME_CURRENT_VERSION to its output
-if [ -n "$(which MAME2-config)" ]; then
-    MAME_CURRENT_VERSION="$(MAME2-config --version)"
-else
-    echo "${script_name}[WARN]: No MAME2-config binary found!"
-fi
-
 check_latest_version() {
     MAME_LATEST_JSON="$(curl -s "${MAME_LATEST_URL}")"
     MAME_LATEST_TAG="$(echo "${MAME_LATEST_JSON}" | jq -r .tag_name)"
