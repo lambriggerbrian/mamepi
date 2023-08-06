@@ -14,7 +14,7 @@ declare SDL_LATEST_TAG=""
 
 # Get SDL_GIT_URL from environment variable, default to https://github.com/libsdl-org/SDL
 declare -r SDL_GIT_URL="${SDL_GIT_URL:-https://github.com/libsdl-org/SDL}"
-declare -a SDL_BUILD_DEPS=("build-essential")
+declare -a SDL_BUILD_DEPS=("build-essential" "gcc-aarch64-linux-gnu")
 declare -a SDL_CONFIG_OPTS=("--disable-video-opengl" "--disable-video-opengles1" "--disable-video-x11" "--disable-pulseaudio" "--disable-esd" "--disable-video-wayland" "--disable-video-rpi" "--disable-video-vulkan" "--enable-video-kmsdrm" "--enable-video-opengles2" "--enable-alsa" "--disable-joystick-virtual" "--enable-arm-neon" "--enable-arm-simd")
 
 # If sdl2-config is installed, set SDL_CURRENT_VERSION to its output
@@ -58,15 +58,14 @@ main() {
 
     # Configure and build
     echo "${script_name}[INFO]: Installing build dependencies..."
-    apt-get install -y "${SDL_BUILD_DEPS[@]}"
+    sudo apt-get install -y "${SDL_BUILD_DEPS[@]}"
+    echo "${script_name}[INFO]: Buiding SDL2 ${SDL_LATEST_VERSION}..."
+    ./configure "${SDL_CONFIG_OPTS[@]}"
+    make
 
     echo "${script_name}[ERROR]: Script is incomplete!" && return 1
 
-    echo "Buiding SDL2 ${SDL_LATEST_VERSION}..."
-    ./configure "${SDL_CONFIG_OPTS[@]}"
-    make -j $(nproc) CFLAGS= ' -mcpu=cortex-a72 '
-
-    sudo make install
+    make install
 
     # SDL2_ttf
     wget https://libsdl.org/projects/SDL_ttf/release/SDL2_ttf-2.0.15.tar.gz
