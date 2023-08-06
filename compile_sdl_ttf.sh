@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 # Build the latest SDL_ttf version
 

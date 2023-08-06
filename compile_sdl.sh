@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 # Build the latest SDL2 version without X11 dependency.
 
