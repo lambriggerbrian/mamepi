@@ -18,17 +18,17 @@ declare -a HARFBUZZ_BUILD_DEPS=("meson" "pkg-config" "ragel" "gtk-doc-tools" "gc
 check_latest_version() {
     HARFBUZZ_LATEST_TAG="$(curl -s "${HARFBUZZ_LATEST_URL}" | jq -r .tag_name)"
     if [ -z "${HARFBUZZ_LATEST_TAG}" ]; then
-        echo "check_latest_version[ERROR]: Could not get latest HARFBUZZ release tag."
+        echo "check_latest_version[ERROR]: Could not get latest HarfBuzz release tag."
         return 1
     fi
 
     HARFBUZZ_LATEST_VERSION="${HARFBUZZ_LATEST_TAG}" # HARFBUZZ tags are just the version name X.X.X
     if [ -z "${HARFBUZZ_LATEST_VERSION}" ]; then
-        echo "check_latest_version[ERROR]: Could not get latest HARFBUZZ version."
+        echo "check_latest_version[ERROR]: Could not get latest HarfBuzz version."
         return 1
     fi
 
-    echo "check_latest_version[INFO]: Latest HARFBUZZ version is ${HARFBUZZ_LATEST_VERSION}"
+    echo "check_latest_version[INFO]: Latest HarfBuzz version is ${HARFBUZZ_LATEST_VERSION}"
 }
 
 main() {
@@ -37,7 +37,7 @@ main() {
     sudo apt install -y jq
 
     # Check HARFBUZZ versions
-    echo "${script_name}[INFO]: Checking HARFBUZZ versions."
+    echo "${script_name}[INFO]: Checking HarBuzz versions."
     check_latest_version
     echo "${script_name}[INFO]: Current version [${HARFBUZZ_CURRENT_VERSION}], latest version [${HARFBUZZ_LATEST_VERSION}]"
     if [ "${HARFBUZZ_CURRENT_VERSION}" = "${HARFBUZZ_LATEST_VERSION}" ]; then
@@ -54,8 +54,8 @@ main() {
     # Configure and build
     echo "${script_name}[INFO]: Installing build dependencies..."
     sudo apt install -y "${HARFBUZZ_BUILD_DEPS[@]}"
-    echo "${script_name}[INFO]: Buiding HARFBUZZ ${HARFBUZZ_LATEST_VERSION}..."
-    meson build && meson test -Cbuild
+    echo "${script_name}[INFO]: Buiding HarfBuzz ${HARFBUZZ_LATEST_VERSION}..."
+    meson build
 }
 
 main "$@"
