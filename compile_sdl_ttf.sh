@@ -55,12 +55,11 @@ main() {
     echo "${script_name}[INFO]: Installing build dependencies..."
     sudo apt install -y "${SDL_TTF_BUILD_DEPS[@]}"
     echo "${script_name}[INFO]: Buiding SDL_ttf ${SDL_TTF_LATEST_VERSION}..."
-    ./configure
+    ./configure --without-x --disable-freetype-builtin --disable-harfbuzz-builtin
     make -j "$(nproc)"
 
     # Install artifacts
     sudo make install
-    sudo ldconfig -v
 }
 
 main "$@"
