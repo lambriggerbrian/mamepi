@@ -41,6 +41,9 @@ check_latest_version() {
 }
 
 main() {
+    # Installing jq for version check
+    sudo apt update
+    sudo apt install -y jq
     # Check SDL versions
     echo "${script_name}[INFO]: Checking SDL versions."
     check_latest_version
@@ -58,7 +61,7 @@ main() {
 
     # Configure and build
     echo "${script_name}[INFO]: Installing build dependencies..."
-    sudo apt-get install -y "${SDL_BUILD_DEPS[@]}"
+    sudo apt install -y "${SDL_BUILD_DEPS[@]}"
     echo "${script_name}[INFO]: Buiding SDL2 ${SDL_LATEST_VERSION}..."
     ./configure "${SDL_CONFIG_OPTS[@]}"
     make
