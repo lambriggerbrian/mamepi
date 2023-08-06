@@ -2,10 +2,9 @@
 
 # Build the latest SDL2 version without X11 dependency.
 
-declare -r script_name="$(basename ${0})"
-declare -r current_dir="$(realpath .)"
+declare -r script_name="$(basename "${0}")"
 
-# Get SDL_URL from environment variable, default to https://api.github.com/repos/libsdl-org/SDL/releases/latest
+# Get SDL_LATEST_URL from environment variable, default to https://api.github.com/repos/libsdl-org/SDL/releases/latest
 declare -r SDL_LATEST_URL="${SDL_LATEST_URL:-https://api.github.com/repos/libsdl-org/SDL/releases/latest}"
 # Get SDL_CURRENT_VERSION from environment variable or set to NONE
 declare SDL_CURRENT_VERSION="${SDL_CURRENT_VERSION:-NONE}"
@@ -25,7 +24,7 @@ else
 fi
 
 check_latest_version() {
-    SDL_LATEST_TAG="$(curl -s ${SDL_LATEST_URL} | jq -r .tag_name)"
+    SDL_LATEST_TAG="$(curl -s "${SDL_LATEST_URL}" | jq -r .tag_name)"
     if [ -z "${SDL_LATEST_TAG}" ]; then
         echo "check_latest_version[ERROR]: Could not get latest SDL release tag."
         return 1
@@ -44,6 +43,7 @@ main() {
     # Installing jq for version check
     sudo apt update
     sudo apt install -y jq
+
     # Check SDL versions
     echo "${script_name}[INFO]: Checking SDL versions."
     check_latest_version
@@ -64,26 +64,10 @@ main() {
     sudo apt install -y "${SDL_BUILD_DEPS[@]}"
     echo "${script_name}[INFO]: Buiding SDL2 ${SDL_LATEST_VERSION}..."
     ./configure "${SDL_CONFIG_OPTS[@]}"
-    make
+    make -j "$(nproc)"
 
-    echo "${script_name}[ERROR]: Script is incomplete!" && return 1
-
-    make install
-
-    # SDL2_ttf
-    wget https://libsdl.org/projects/SDL_ttf/release/SDL2_ttf-2.0.15.tar.gz
-    tar zxvf SDL2_ttf-2.0.15.tar.gz
-    rm SDL2_ttf-2.0.15.tar.gz
-    cd SDL2_ttf-2.0.15
-    ./configure
-    make -j $(nproc)
+    # Install artifacts
     sudo make install
-    sudo ldconfig -v
-
-    cd ~
-    sudo rm -R SDL2 - ${VERSION}
-    sudo rm -R SDL2_ttf-2.0.15
-    sudo apt-get remove build-essential -y
 }
 
 main "$@"

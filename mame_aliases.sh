@@ -28,7 +28,7 @@ update_settings() {
     # else append setting_name=setting_value to SETTINGS_FILE
     # NOTE: This would update all matching occurrences of setting_name in SETTINGS_FILE
     if grep -q "^${setting_name}=" "${SETTINGS_FILE}"; then
-        sed -i "s/^${setting_name}=.*$/${output_line}/g" "$(readlink -f ${SETTINGS_FILE})"
+        sed -i "s/^${setting_name}=.*$/${output_line}/g" "$(readlink -f "${SETTINGS_FILE}")"
     else
         echo "${output_line}" | tee -a "${SETTINGS_FILE}"
     fi
