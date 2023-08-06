@@ -11,8 +11,8 @@ declare HARFBUZZ_CURRENT_VERSION="${HARFBUZZ_CURRENT_VERSION:-NONE}"
 declare HARFBUZZ_LATEST_VERSION=""
 declare HARFBUZZ_LATEST_TAG=""
 
-# Get HARFBUZZ_GIT_URL from environment variable, default to https://github.com/libHARFBUZZ-org/HARFBUZZ
-declare -r HARFBUZZ_GIT_URL="${HARFBUZZ_GIT_URL:-https://github.com/libHARFBUZZ-org/HARFBUZZ}"
+# Get HARFBUZZ_GIT_URL from environment variable, default to https://github.com/harfbuzz/harfbuzz
+declare -r HARFBUZZ_GIT_URL="${HARFBUZZ_GIT_URL:-https://github.com/harfbuzz/harfbuzz}"
 declare -a HARFBUZZ_BUILD_DEPS=("meson" "pkg-config" "ragel" "gtk-doc-tools" "gcc" "g++" "libfreetype6-dev" "libglib2.0-dev" "libcairo2-dev")
 
 check_latest_version() {
