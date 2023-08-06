@@ -14,7 +14,7 @@ declare MAME_LATEST_TAG=""
 # Get MAME_GIT_URL from environment variable, default to https://github.com/mamedev/mame
 declare -r MAME_GIT_URL="${MAME_GIT_URL:-https://github.com/mamedev/mame}"
 declare -a MAME_BUILD_DEPS=("build-essential" "gcc-aarch64-linux-gnu" "fontconfig" "libfontconfig-dev" "libx11-dev" "libpulse-dev")
-declare -a MAME_CONFIG_OPTS=("TARGETOS=linux" "NO_X11=1" "NOWERROR=1" "NO_USE_XINPUT=1" "NO_USE_XINPUT_WII_LIGHTGUN_HACK=1" "NO_OPENGL=1" "USE_QTDEBUG=0" "DEBUG=0" "REGENIE=1" "NO_BGFX=1" "FORCE_DRC_C_BACKEND=1" "NO_USE_PORTAUDIO=1" "SYMBOLS=0")
+declare -a MAME_MAKE_OPTS=("TARGETOS=linux" "NO_X11=1" "NOWERROR=1" "NO_USE_XINPUT=1" "NO_USE_XINPUT_WII_LIGHTGUN_HACK=1" "NO_OPENGL=1" "USE_QTDEBUG=0" "DEBUG=0" "REGENIE=1" "NO_BGFX=1" "FORCE_DRC_C_BACKEND=1" "NO_USE_PORTAUDIO=1" "SYMBOLS=0")
 declare -r MAX_THREAD=2
 
 check_latest_version() {
@@ -59,8 +59,7 @@ main() {
     echo "${script_name}[INFO]: Installing build dependencies..."
     sudo apt install -y "${MAME_BUILD_DEPS[@]}"
     echo "${script_name}[INFO]: Buiding MAME ${MAME_LATEST_VERSION}..."
-    ./configure "${MAME_CONFIG_OPTS[@]}"
-    make -j "${MAX_THREAD}"
+    make -j "${MAX_THREAD}" "${MAME_MAKE_OPTS[@]}"
 
     # Install artifacts
     # sudo make install
