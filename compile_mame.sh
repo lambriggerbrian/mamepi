@@ -13,7 +13,7 @@ declare MAME_LATEST_TAG=""
 
 # Get MAME_GIT_URL from environment variable, default to https://github.com/mamedev/mame
 declare -r MAME_GIT_URL="${MAME_GIT_URL:-https://github.com/mamedev/mame}"
-declare -a MAME_BUILD_DEPS=("build-essential" "gcc-aarch64-linux-gnu" "fontconfig" "libfontconfig-dev" "libx11-dev" "libpulse-dev")
+declare -a MAME_BUILD_DEPS=("build-essential" "git" "python3" "fontconfig" "libfontconfig-dev" "libx11-dev" "libpulse-dev" "qtbase5-dev" "qtbase5-dev-tools" "qtchooser" "qt5-qmake")
 declare -a MAME_MAKE_OPTS=("TARGETOS=linux" "NO_X11=1" "NOWERROR=1" "NO_USE_XINPUT=1" "NO_USE_XINPUT_WII_LIGHTGUN_HACK=1" "NO_OPENGL=1" "USE_QTDEBUG=0" "DEBUG=0" "REGENIE=1" "NO_BGFX=1" "FORCE_DRC_C_BACKEND=1" "NO_USE_PORTAUDIO=1" "SYMBOLS=0")
 declare -r MAX_THREAD=2
 
