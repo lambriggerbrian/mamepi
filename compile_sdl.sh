@@ -68,6 +68,9 @@ main() {
 
     # Install artifacts
     sudo make install
+
+    # Install SDL2_TTF
+    sudo apt install -y libsdl2-ttf-dev
 }
 
 main "$@"
