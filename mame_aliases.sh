@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # Get SETTINGS_FILE location from environment variable, default to ~/settings
-declare SETTINGS_FILE=${SETTINGS_FILE:-"$(realpath ~/settings)"}
+declare SETTINGS_FILE="${SETTINGS_FILE:-"$(realpath ~/settings)"}"
 # Get ATTRACT_EMULATORS_DIR location from environment variable, default to ~/.attract/emulators
 # NOTE: realpath -m will make canonical path whether parent dirs exist or not so that
 #       error messages are more helpful as to where ATTRACT_EMULATORS_DIR is looking
-declare ATTRACT_EMULATORS_DIR=${ATTRACT_EMULATORS_DIR:-"$(realpath -m ~/.attract/emulators)"}
+declare ATTRACT_EMULATORS_DIR="${ATTRACT_EMULATORS_DIR:-"$(realpath -m ~/.attract/emulators)"}"
 
 # Update setting in if it exists in SETTINGS_FILE, else append it
 #   Usage: update_settings setting_name setting_value
@@ -79,8 +79,9 @@ set_attract() {
     # Set FRONTEND to attract
     update_settings FRONTEND attract
     echo "Frontend set to attract (reboot to apply)."
-    # Set AUTOROM with the emulator_name and rom_name
-    update_settings AUTOROM "AUTOROM=\"${emulator_name} ${rom_name}\""
+    # Set EMULATOR with emulator_name and AUTOROM with rom_name
+    update_settings EMULATOR "EMULATOR=\"${emulator_name}\""
+    update_settings AUTOROM "AUTOROM=\"${rom_name}\""
     echo "Automatic ROM Launch set to: ${rom_name} (emulator ${emulator_name})."
 }
 
