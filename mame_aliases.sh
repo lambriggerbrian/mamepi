@@ -41,7 +41,7 @@ set_mame() {
     local -r rom_name="${1}"
     # Check that we have a rom_name
     if [ -z "${rom_name}" ]; then
-        echo "set_mame[ERR]: Must pass rom_name or NONE to use the MAME frontend."
+        echo "set_mame[ERR]: Must pass rom_name or none to use the MAME frontend."
         return 1
     fi
     # Set FRONTEND to mame
@@ -88,7 +88,7 @@ set_attract() {
 # Set which frontend program is run at start
 #   Usage: set_frontend frontend_program rom_name [emulator_name]
 #       frontend_program: name of frontend program to run (options - mame, attract)
-#       rom_name: name of ROM to launch at start or NONE to unset for MAME
+#       rom_name: name of ROM to launch at start or none to unset for MAME
 #       emulator_name: emulator to use (only used if FRONTEND_PROGRAM is attract)
 # $3: ROM to launch with emulator $2
 set_frontend() {
