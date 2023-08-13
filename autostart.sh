@@ -80,8 +80,8 @@ main() {
                 fi
                 echo "${script_name}[INFO]: Launching mame! (autorom: ${MAME_AUTOROM})" | tee "${MAME_STDOUT}"
                 if "${MAME_BIN}" "${MAME_AUTOROM}" >>"${MAME_STDOUT}" 2>>"${MAME_STDERR}"; then
-                    # Only break the loop if we exit cleanly (exit code 0) and ALWAYS_RESTART is 1
-                    [ "${ALWAYS_RESTART}" = 1 ] && continue_loop=0
+                    # Only break the loop if we exit cleanly (exit code 0) and ALWAYS_RESTART is 0
+                    [ "${ALWAYS_RESTART}" = 0 ] && continue_loop=0
                 fi
                 ;;
             esac
