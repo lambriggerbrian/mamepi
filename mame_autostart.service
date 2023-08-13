@@ -19,4 +19,3 @@ StandardInput=tty
 
 [Install]
 WantedBy=multi-user.target
-Also=shutdown.service
