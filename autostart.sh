@@ -33,7 +33,6 @@ main() {
 
     if [ -n "${FRONTEND}" ]; then
         local -i continue_loop=1
-        local command=""
         while [ "${continue_loop}" = 1 ]; do
             case ${FRONTEND,,} in
             attract) # Attract Mode (UNIMPLEMENTED)
@@ -76,13 +75,12 @@ main() {
                 if [ -n "${mame_autorom}" ] && [ ! -f "${MAME_ROMS_DIR}/${mame_autorom}.zip" ]; then
                     echo "${script_name}[WARN]: No ROM '${mame_autorom}' found in ROMS dir '${MAME_ROMS_DIR}'"
                 fi
-                command="${MAME_BIN}" "${mame_autorom}" >>"${MAME_STDOUT}" 2>>"${MAME_STDERR}"
+                if "${MAME_BIN}" "${mame_autorom}" >>"${MAME_STDOUT}" 2>>"${MAME_STDERR}"; then
+                    # Only break the loop if we exit cleanly (exit code 0)
+                    continue_loop=0
+                fi
                 ;;
             esac
-            # Only break the loop if we exit cleanly (exit code 0)
-            if ${command}; then
-                continue_loop=0
-            fi
         done
         return 0
     else
