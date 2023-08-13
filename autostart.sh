@@ -93,3 +93,5 @@ main() {
         echo
     fi
 }
+
+main "$@"
