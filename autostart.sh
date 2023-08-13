@@ -18,6 +18,9 @@ declare -r ADVANCE_BIN="${ADVANCE_BIN:-"$(which ADVANCE)":-"$(realpath -m ~/fron
 
 declare -r MAME_BIN="${MAME_BIN:-"$(which mame)":-"$(realpath -m ~/mame/mame)"}"
 declare -r MAME_ROMS_DIR="${MAME_ROMS_DIR:-"/usr/local/share/games/mame/roms"}"
+declare -r MAME_STDOUT="${MAME_STDOUT:-$(realpath ~/mame.stdout)}"
+declare -r MAME_STDERR="${MAME_STDERR:-$(realpath ~/mame.stderr)}"
+declare -r MAME_AUTOROM="${MAME_AUTOROM:-AUTOROM}" # Sourced from SETTINGS_FILE
 
 # Set audiodevice to hw 3.5mm jack by default
 export -r AUDIODEV="hw"
@@ -69,16 +72,12 @@ main() {
             mame) # MAME GUI or Automatic ROM Launch mode if AUTOROM is set
                 echo "${script_name}[INFO]: Launching advance frontend..." | tee "${main_stdout}"
 
-                local -r mame_stdout="$(realpath ~/mame.stdout)"
-                local -r mame_stderr="$(realpath ~/mame.stderr)"
-                local -r mame_autorom="${AUTOROM}" # Sourced from SETTINGS_FILE
-
                 # Clear output files
-                echo "" | tee "${mame_stdout}" "${mame_stderr}"
+                echo "" | tee "${MAME_STDOUT}" "${MAME_STDERR}"
                 if [ -n "${mame_autorom}" ] && [ ! -f "${MAME_ROMS_DIR}/${mame_autorom}.zip" ]; then
                     echo "${script_name}[WARN]: No ROM '${mame_autorom}' found in ROMS dir '${MAME_ROMS_DIR}'"
                 fi
-                command="${MAME_BIN}" "${mame_autorom}" >>"${mame_stdout}" 2>>"${mame_stderr}"
+                command="${MAME_BIN}" "${mame_autorom}" >>"${MAME_STDOUT}" 2>>"${MAME_STDERR}"
                 ;;
             esac
             # Only break the loop if we exit cleanly (exit code 0)
