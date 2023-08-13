@@ -8,6 +8,9 @@ declare -r script_name="$(basename "${0}")"
 declare SETTINGS_FILE="${SETTINGS_FILE:-"$(realpath ~/settings)"}"
 source "${SETTINGS_FILE}"
 
+# If ALWAYS_RESTART is 1, then restart regardless of exit code
+declare -r ALWAYS_RESTART="${ALWAYS_RESTART:-0}" # Sourced from SETTINGS_FILE
+
 # Get ATTRACT_EMULATORS_DIR location from environment variable, default to ~/.attract/emulators
 # NOTE: realpath -m will make canonical path whether parent dirs exist or not so that
 #       error messages are more helpful as to where ATTRACT_EMULATORS_DIR is looking
@@ -77,8 +80,8 @@ main() {
                 fi
                 echo "${script_name}[INFO]: Launching mame! (autorom: ${MAME_AUTOROM})" | tee "${MAME_STDOUT}"
                 if "${MAME_BIN}" "${MAME_AUTOROM}" >>"${MAME_STDOUT}" 2>>"${MAME_STDERR}"; then
-                    # Only break the loop if we exit cleanly (exit code 0)
-                    continue_loop=0
+                    # Only break the loop if we exit cleanly (exit code 0) and ALWAYS_RESTART is 1
+                    [ "${ALWAYS_RESTART}" = 1 ] && continue_loop=0
                 fi
                 ;;
             esac
