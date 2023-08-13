@@ -32,10 +32,9 @@ main() {
     echo "" | tee "${main_stdout}" "${main_stderr}"
 
     if [ -n "${FRONTEND}" ]; then
-        local -i continue_loop=0
+        local -i continue_loop=1
         local command=""
-        while
-            "${continue_loop}"
+        while [ "${continue_loop}" = 1 ]; do
             case ${FRONTEND,,} in
             attract) # Attract Mode (UNIMPLEMENTED)
                 # if [ -n "${AUTOROM}" ] && [ -n "${EMULATOR}" ]; then
@@ -82,15 +81,13 @@ main() {
             esac
             # Only break the loop if we exit cleanly (exit code 0)
             if ${command}; then
-                continue_loop=1
+                continue_loop=0
             fi
-        do
-            :
         done
+        return 0
     else
-        echo $0 - FRONTEND variable is not defined !
-        read -n 1 -s -r -p ' Press any key to continue... '
-        echo
+        echo "${script_name}[INFO]: FRONTEND is not defined!" | tee "${main_stdout}"
+        return 1
     fi
 }
 
