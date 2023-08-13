@@ -17,7 +17,7 @@ declare -r ATTRACT_BIN="${ATTRACT_BIN:-"$(which attract)"}"
 declare -r ADVANCE_BIN="${ADVANCE_BIN:-"$(realpath -m ~/frontend/advance/advmenu)"}"
 
 declare -r MAME_BIN="${MAME_BIN:-"$(which mame)"}"
-declare -r MAME_ROMS_DIR="${MAME_ROMS_DIR:-"/usr/local/share/games/mame/roms"}"
+declare -r MAME_ROMS_DIR="${MAME_ROMS_DIR:-"/usr/share/games/mame/roms"}"
 declare -r MAME_STDOUT="${MAME_STDOUT:-$(realpath ~/mame.stdout)}"
 declare -r MAME_STDERR="${MAME_STDERR:-$(realpath ~/mame.stderr)}"
 declare -r MAME_AUTOROM="${MAME_AUTOROM:-${AUTOROM}}" # Sourced from SETTINGS_FILE
