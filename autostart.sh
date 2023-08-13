@@ -72,14 +72,15 @@ main() {
                 ;;
             mame) # MAME GUI or Automatic ROM Launch mode if AUTOROM is set
                 echo "${script_name}[INFO]: Launching mame frontend..." | tee "${main_stdout}"
-
+                local autorom="${MAME_AUTOROM}"
                 # Clear output files
                 echo "" | tee "${MAME_STDOUT}" "${MAME_STDERR}"
-                if [ -n "${MAME_AUTOROM}" ] && [ ! -f "${MAME_ROMS_DIR}/${MAME_AUTOROM}.zip" ]; then
-                    echo "${script_name}[WARN]: No ROM '${MAME_AUTOROM}' found in ROMS dir '${MAME_ROMS_DIR}'" | tee "${MAME_STDERR}"
+                if [ -n "${autorom}" ] && [ ! -f "${MAME_ROMS_DIR}/${autorom}.zip" ]; then
+                    echo "${script_name}[WARN]: No ROM '${autorom}' found in ROMS dir '${MAME_ROMS_DIR}'. Launching mame without AUTOROM..." | tee "${MAME_STDERR}"
+                    autorom=""
                 fi
-                echo "${script_name}[INFO]: Launching mame! (autorom: ${MAME_AUTOROM})" | tee "${MAME_STDOUT}"
-                if "${MAME_BIN}" "${MAME_AUTOROM}" >>"${MAME_STDOUT}" 2>>"${MAME_STDERR}"; then
+                echo "${script_name}[INFO]: Launching mame! (autorom: ${autorom})" | tee "${MAME_STDOUT}"
+                if "${MAME_BIN}" "${autorom}" >>"${MAME_STDOUT}" 2>>"${MAME_STDERR}"; then
                     # Only break the loop if we exit cleanly (exit code 0) and ALWAYS_RESTART is 0
                     [ "${ALWAYS_RESTART}" = 0 ] && continue_loop=0
                 fi
