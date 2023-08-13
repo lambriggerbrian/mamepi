@@ -10,6 +10,7 @@ User=admin
 Group=admin
 PAMName=login
 Type=simple
+WorkingDirectory=/home/admin
 EnvironmentFile=/home/admin/settings
 ExecStart=/home/admin/mamepi/autostart.sh
 Restart=always
