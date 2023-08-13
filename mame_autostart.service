@@ -1,0 +1,22 @@
+[Unit]
+Description=MAMEPi Autostart service
+Conflicts=getty@tty1.service smbd.service nmbd.service rng-tools.service cron.service mame-artwork-mgmt.service
+Requires=local-fs.target
+After=local-fs.target
+ConditionPathExists=/home/admin/settings
+
+[Service]
+User=admin
+Group=admin
+PAMName=login
+Type=simple
+EnvironmentFile=/home/admin/settings
+ExecStart=/home/admin/mamepi/autostart.sh
+Restart=on-abort
+RestartSec=5
+TTYPath=/dev/tty1
+StandardInput=tty
+
+[Install]
+WantedBy=multi-user.target
+Also=shutdown.service
