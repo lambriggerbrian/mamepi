@@ -23,7 +23,7 @@ declare -r MAME_STDERR="${MAME_STDERR:-$(realpath ~/mame.stderr)}"
 declare -r MAME_AUTOROM="${MAME_AUTOROM:-AUTOROM}" # Sourced from SETTINGS_FILE
 
 # Set audiodevice to hw 3.5mm jack by default
-export -r AUDIODEV="hw"
+export AUDIODEV="hw"
 
 main() {
     local -r main_stdout="$(realpath ~/"${script_name}".stdout)"
