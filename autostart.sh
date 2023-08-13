@@ -12,11 +12,11 @@ source "${SETTINGS_FILE}"
 # NOTE: realpath -m will make canonical path whether parent dirs exist or not so that
 #       error messages are more helpful as to where ATTRACT_EMULATORS_DIR is looking
 declare ATTRACT_EMULATORS_DIR="${ATTRACT_EMULATORS_DIR:-"$(realpath -m ~/.attract/emulators)"}"
-declare -r ATTRACT_BIN="${ATTRACT_BIN:-"$(which attract)":-"/usr/local/bin/attract"}"
+declare -r ATTRACT_BIN="${ATTRACT_BIN:-"$(which attract)"}"
 
-declare -r ADVANCE_BIN="${ADVANCE_BIN:-"$(which ADVANCE)":-"$(realpath -m ~/frontend/advance/advmenu)"}"
+declare -r ADVANCE_BIN="${ADVANCE_BIN:-"$(realpath -m ~/frontend/advance/advmenu)"}"
 
-declare -r MAME_BIN="${MAME_BIN:-"$(which mame)":-"$(realpath -m ~/mame/mame)"}"
+declare -r MAME_BIN="${MAME_BIN:-"$(which mame)"}"
 declare -r MAME_ROMS_DIR="${MAME_ROMS_DIR:-"/usr/local/share/games/mame/roms"}"
 declare -r MAME_STDOUT="${MAME_STDOUT:-$(realpath ~/mame.stdout)}"
 declare -r MAME_STDERR="${MAME_STDERR:-$(realpath ~/mame.stderr)}"
@@ -69,7 +69,7 @@ main() {
                 # "${ADVANCE_BIN}" >>"${advance_stdout}" 2>>"${advance_stderr}"
                 ;;
             mame) # MAME GUI or Automatic ROM Launch mode if AUTOROM is set
-                echo "${script_name}[INFO]: Launching advance frontend..." | tee "${main_stdout}"
+                echo "${script_name}[INFO]: Launching mame frontend..." | tee "${main_stdout}"
 
                 # Clear output files
                 echo "" | tee "${MAME_STDOUT}" "${MAME_STDERR}"
