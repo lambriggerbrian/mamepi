@@ -9,24 +9,25 @@ declare SETTINGS_FILE="${SETTINGS_FILE:-"$(realpath ~/settings)"}"
 source "${SETTINGS_FILE}"
 
 # If ALWAYS_RESTART is 1, then restart regardless of exit code
-declare -r ALWAYS_RESTART="${ALWAYS_RESTART:-0}" # Sourced from SETTINGS_FILE
+declare -r RESTART="${RESTART:-no}" # Sourced from SETTINGS_FILE
 
-# Get ATTRACT_EMULATORS_DIR location from environment variable, default to ~/.attract/emulators
-# NOTE: realpath -m will make canonical path whether parent dirs exist or not so that
-#       error messages are more helpful as to where ATTRACT_EMULATORS_DIR is looking
-declare ATTRACT_EMULATORS_DIR="${ATTRACT_EMULATORS_DIR:-"$(realpath -m ~/.attract/emulators)"}"
-declare -r ATTRACT_BIN="${ATTRACT_BIN:-"$(which attract)"}"
+# start_mame.sh script
+declare -r START_MAME_SCRIPT="${START_MAME_SCRIPT:-"$(realpath ~/mamepi/start_mame.sh)"}"
 
-declare -r ADVANCE_BIN="${ADVANCE_BIN:-"$(realpath -m ~/frontend/advance/advmenu)"}"
-
-declare -r MAME_BIN="${MAME_BIN:-"$(which mame)"}"
-declare -r MAME_ROMS_DIR="${MAME_ROMS_DIR:-"/usr/share/games/mame/roms"}"
-declare -r MAME_STDOUT="${MAME_STDOUT:-$(realpath ~/mame.stdout)}"
-declare -r MAME_STDERR="${MAME_STDERR:-$(realpath ~/mame.stderr)}"
-declare -r MAME_AUTOROM="${MAME_AUTOROM:-${AUTOROM}}" # Sourced from SETTINGS_FILE
-
-# Set audiodevice to hw 3.5mm jack by default
-export AUDIODEV="hw"
+handle_mame() {
+    echo "${script_name}[INFO]: Launching mame frontend..." | tee "${main_stdout}"
+    if "${START_MAME_SCRIPT}"; then
+        # On clean exit, don't restart if RESTART is no or on-error (meaning ONLY restart on-error)
+        if [ "${RESTART}" = "no" ] || [ "${RESTART}" = "on-error" ]; then
+            return 1
+        fi
+    else
+        # On unclean exit, don't restart if RESTART is no or on-clean (meaning ONLY restart on-clean)
+        if [ "${RESTART}" = "no" ] || [ "${RESTART}" = "on-clean" ]; then
+            return 1
+        fi
+    fi
+}
 
 main() {
     local -r main_stdout="$(realpath ~/"${script_name}".stdout)"
@@ -34,55 +35,22 @@ main() {
     # Clear output files
     echo "" | tee "${main_stdout}" "${main_stderr}"
 
+    # Let systemd know we're ready (for type=notify services)
+    systemd-notify --ready
     if [ -n "${FRONTEND}" ]; then
-        local -i continue_loop=1
-        while [ "${continue_loop}" = 1 ]; do
+        local do_restart="yes"
+        while [ "${do_restart}" = "yes" ]; do
             case ${FRONTEND,,} in
             attract) # Attract Mode (UNIMPLEMENTED)
-                # if [ -n "${AUTOROM}" ] && [ -n "${EMULATOR}" ]; then
-                #     local -r EMULATOR_CFG="${ATTRACT_EMULATORS_DIR}/${EMULNAME}.cfg"
-                #     if [ -f $CFGFILE ]; then
-                #         while read var value; do
-                #             [ ! -z $var ] && [ " ${var:0:1} " != " # " ] && export " $var " = " $value "
-                #         done <$CFGFILE
-                #         ARGS= ${args// \[ name \] / $ROMNAME }
-                #         ARGS=${ARGS// \$ HOME / $HOME }
-                #         EXEC= ${executable// \$ HOME / $HOME }
-                #         FRAMEFILE= $(sed ' s/^.*\s-framefile\s\(\S*\) \s.*$/\1/ ' <<<$ARGS)
-                #     fi
-                #     if [ ! -z $FRAMEFILE ] && [ -f $FRAMEFILE ] && [ ! -z $EXEC ] && [ -x $EXEC ]; then # Automatic ROM Launch mode
-                #         $EXEC $ARGS -nolog >/dev/null 2>/dev/null
-                #     else
-                #         stty-echo
-                #         /usr/local/bin/attract --loglevel silent >/dev/null 2>&1
-                #     fi
-                # else
-                #     stty-echo
-                #     /usr/local/bin/attract --loglevel silent >/dev/null 2>&1
-                # fi
                 echo "${script_name}[INFO]: Launching attract frontend..." | tee "${main_stdout}"
                 ;;
             advance) #AdvanceMENU (UNIMPLEMENTED)
                 echo "${script_name}[INFO]: Launching advance frontend..." | tee "${main_stdout}"
-                # local -r advance_stdout="$(realpath ~/mame.stdout)"
-                # local -r advance_stderr="$(realpath ~/mame.stderr)"
-                # # Clear output files
-                # echo "" | tee "${advance_stdout}" "${advance_stderr}"
-                # "${ADVANCE_BIN}" >>"${advance_stdout}" 2>>"${advance_stderr}"
                 ;;
             mame) # MAME GUI or Automatic ROM Launch mode if AUTOROM is set
-                echo "${script_name}[INFO]: Launching mame frontend..." | tee "${main_stdout}"
-                local autorom="${MAME_AUTOROM}"
-                # Clear output files
-                echo "" | tee "${MAME_STDOUT}" "${MAME_STDERR}"
-                if [ -n "${autorom}" ] && [ ! -f "${MAME_ROMS_DIR}/${autorom}.zip" ]; then
-                    echo "${script_name}[WARN]: No ROM '${autorom}' found in ROMS dir '${MAME_ROMS_DIR}'. Launching mame without AUTOROM..." | tee "${MAME_STDERR}"
-                    autorom=""
-                fi
-                echo "${script_name}[INFO]: Launching mame! (autorom: ${autorom})" | tee "${MAME_STDOUT}"
-                if "${MAME_BIN}" "${autorom}" >>"${MAME_STDOUT}" 2>>"${MAME_STDERR}"; then
-                    # Only break the loop if we exit cleanly (exit code 0) and ALWAYS_RESTART is 0
-                    [ "${ALWAYS_RESTART}" = 0 ] && continue_loop=0
+                # handle_mame returns non-zero if we shouldn't restart
+                if ! handle_mame; then
+                    do_restart="no"
                 fi
                 ;;
             esac
@@ -95,3 +63,7 @@ main() {
 }
 
 main "$@"
+declare exit_code="$?"
+# Let systemd know we're stopping (for type=notify services)
+systemd-notify --stopping
+return "${exit_code}"

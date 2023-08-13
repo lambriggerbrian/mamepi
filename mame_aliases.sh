@@ -46,7 +46,7 @@ set_mame() {
     fi
     # Set FRONTEND to mame
     update_settings FRONTEND mame
-    echo "set_mame[INFO]: Frontend set to mame (reboot to apply)."
+    echo "set_mame[INFO]: Frontend set to mame."
     # Unset AUTOROM if rom_name is 'none'
     if [ "${rom_name}" = "none" ]; then
         echo "set_mame[INFO]: Unsetting AUTOROM value."
@@ -78,7 +78,7 @@ set_attract() {
     fi
     # Set FRONTEND to attract
     update_settings FRONTEND attract
-    echo "Frontend set to attract (reboot to apply)."
+    echo "Frontend set to attract."
     # Set EMULATOR with emulator_name and AUTOROM with rom_name
     update_settings EMULATOR "EMULATOR=\"${emulator_name}\""
     update_settings AUTOROM "AUTOROM=\"${rom_name}\""
