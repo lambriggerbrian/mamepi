@@ -72,10 +72,11 @@ main() {
 
                 # Clear output files
                 echo "" | tee "${MAME_STDOUT}" "${MAME_STDERR}"
-                if [ -n "${mame_autorom}" ] && [ ! -f "${MAME_ROMS_DIR}/${mame_autorom}.zip" ]; then
-                    echo "${script_name}[WARN]: No ROM '${mame_autorom}' found in ROMS dir '${MAME_ROMS_DIR}'"
+                if [ -n "${MAME_AUTOROM}" ] && [ ! -f "${MAME_ROMS_DIR}/${MAME_AUTOROM}.zip" ]; then
+                    echo "${script_name}[WARN]: No ROM '${MAME_AUTOROM}' found in ROMS dir '${MAME_ROMS_DIR}'" | tee "${MAME_STDERR}"
                 fi
-                if "${MAME_BIN}" "${mame_autorom}" >>"${MAME_STDOUT}" 2>>"${MAME_STDERR}"; then
+                echo "${script_name}[INFO]: Launching mame! (autorom: ${MAME_AUTOROM})" | tee "${MAME_STDOUT}"
+                if "${MAME_BIN}" "${MAME_AUTOROM}" >>"${MAME_STDOUT}" 2>>"${MAME_STDERR}"; then
                     # Only break the loop if we exit cleanly (exit code 0)
                     continue_loop=0
                 fi
