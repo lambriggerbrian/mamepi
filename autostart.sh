@@ -35,8 +35,6 @@ main() {
     # Clear output files
     echo "" | tee "${main_stdout}" "${main_stderr}"
 
-    # Let systemd know we're ready (for type=notify services)
-    systemd-notify --ready
     if [ -n "${FRONTEND}" ]; then
         local do_restart="yes"
         while [ "${do_restart}" = "yes" ]; do
