@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# This script launch the selected application (front-end or MAME emulator) and respawn it if quit unexpectedly.
+# This script launches the selected application (front-end or MAME emulator) and restarts it if required
 
 declare -r script_name="$(basename "${0}")"
 
