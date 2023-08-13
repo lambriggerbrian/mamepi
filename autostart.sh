@@ -66,4 +66,4 @@ main "$@"
 declare exit_code="$?"
 # Let systemd know we're stopping (for type=notify services)
 systemd-notify --stopping
-return "${exit_code}"
+exit "${exit_code}"

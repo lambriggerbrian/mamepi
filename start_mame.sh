@@ -33,8 +33,8 @@ fi
 echo "${script_name}[INFO]: Launching mame! (autorom: ${autorom})" | tee "${MAME_STDOUT}"
 if "${MAME_BIN}" "${autorom}" >>"${MAME_STDOUT}" 2>>"${MAME_STDERR}"; then
     echo "${script_name}[INFO]: Clean shutdown of mame completed." | tee "${MAME_STDOUT}"
-    return 0
+    exit 0
 else
     echo "${script_name}[ERROR]: Unclean shutdown of mame completed." | tee "${MAME_STDERR}"
-    return 1
+    exit 1
 fi
