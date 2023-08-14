@@ -1,10 +1,8 @@
 #! /bin/bash
 
-# This script download the missing artwork files (snapshots, titles screens, marquees,
-# control panels and cabinet pictures) based on the content of the ROMs path (ROM files).
-
-# Usage: when a romname is passed (without the .zip extension), only the artwork for this
-#         rom is downloaded.
+# This script download the missing artwork files
+# Can take any number of rom names, or will update for all roms in MAME_ROMS_DIR
+# if no argument is passed
 
 declare -r script_name="$(basename "${0}")"
 
