@@ -23,15 +23,14 @@ get_artwork() {
         local url target_dir target
         case $type in
         snap)
-            # Snapshot is special case (it's called "artpreview" in MAME UI)
+            # Snapshot is special case (url is different)
             url="${SNAP_PREFIX}/${rom_png}"
-            target_dir="${MAME_DIR}/artpreview/${rom_name}"
             ;;
         *)
             url="${URL_PREFIX}/${type}/${rom_png}"
-            target_dir="${MAME_DIR}/${type}/${rom_name}"
             ;;
         esac
+        target_dir="${MAME_DIR}/${type}"
         target="${target_dir}/${rom_png}"
         # Make sure our target directory exists
         mkdir -p "${target_dir}"
@@ -54,9 +53,9 @@ main() {
     local -i exit_code=0
     if ((${#rom_names[@]} == 0)); then
         readarray -d '' rom_names < <(find "${MAME_ROMS_DIR}" -type f -name "*.zip" -print0)
-        local -i num_roms=${#rom_names[@]}
-        [ ${num_roms} -gt 5 ] && info_names="${num_roms} games" || info_names="${rom_names[*]}"
     fi
+    local -i num_roms=${#rom_names[@]}
+    [ ${num_roms} -gt 5 ] && info_names="${num_roms} games" || info_names="${rom_names[*]}"
     echo "${script_name}[INFO]: Downloading artwork for [ ${info_names} ]"
     for rom in "${rom_names[@]}"; do
         if ! get_artwork "${rom}"; then
